@@ -1,29 +1,24 @@
 import React from "react";
 
-function Guess({ guess }) {
-  if (!guess) {
-    return (
-      <p className="guess">
-        <span className="cell"></span>
-        <span className="cell"></span>
-        <span className="cell"></span>
-        <span className="cell"></span>
-        <span className="cell"></span>
-      </p>
-    );
-  }
+import { checkGuess } from "../../game-helpers";
+import { range } from "../../utils";
 
-  const letters = [...guess];
-  if (letters.length !== 5) {
-    throw new Error("Only 5 letter guesses allowed");
-  }
+function Cell({ letter, status }) {
+  const className = status ? `cell ${status}` : "cell";
+  return <span className={className}>{letter}</span>;
+}
+
+function Guess({ guess, answer }) {
+  const result = checkGuess(guess, answer);
 
   return (
     <p className="guess">
-      {letters.map((letter, idx) => (
-        <span className="cell" key={idx}>
-          {letter}
-        </span>
+      {range(5).map((num) => (
+        <Cell
+          key={num}
+          letter={result?.[num].letter}
+          status={result?.[num].status}
+        />
       ))}
     </p>
   );
